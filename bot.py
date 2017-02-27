@@ -1,3 +1,5 @@
+"""Base IRC Bot that abstracts the boilerplate from the actual logic."""
+
 import irclib
 import ircbot
 import sys
@@ -17,16 +19,16 @@ class IRCBot(ircbot.SingleServerIRCBot):
     """Connection to the IRC server. Receives and sends messages.
 
     The purpose of this class is to abstract some of the ircbot/lib framework
-    into one place, like the updates on the server and the environement.
+    into one place, like the updates of the server and the environement.
 
     This bot on itself doesn't do anything. To make it be useful, you have to
-    create another class to put the logic in, implementing the event functions
+    create another class to put the logic in, implement the event functions
     (on_join, on_pubmsg...) and pass its instance to the IRCBot. This way, it
     can call the actual logic after dealing with the boilerplate.
     """
 
     def __init__(self, bot):
-        """Connects to the server and initializes internal state."""
+        """Connects to the server and initializes the internal state."""
         server = sys.argv[1]
         if len(sys.argv) == 3:
             port = DEFAULT_PORT

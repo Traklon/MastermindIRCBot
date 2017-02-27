@@ -1,3 +1,5 @@
+"""AI that finds the best code to propose, and can rate a human player."""
+
 import collections
 
 import utils
@@ -28,7 +30,7 @@ class AI(object):
         self.Reset()
 
     def Reset(self):
-        """Cleaner function to reset the AI than calling __init__."""
+        """Resests the AI to be ready for another game."""
         # At the beginning, all the codes are possible.
         self.remaining_codes = set(
             utils.GetAllCodes(self.max_value, self.num_digits))
@@ -42,7 +44,7 @@ class AI(object):
         return ratings
 
     def ChangeValueAndDigits(self, max_value, num_digits):
-        """Updates to the changes made to the game."""
+        """Updates to match the changes made to the actual game."""
         self.max_value = max_value
         self.num_digits = num_digits
         self.Reset()
@@ -110,7 +112,7 @@ class AI(object):
         actual_removed_percentage = RemovedPercentage(
             len(updated_remaining_codes))
 
-        # Actually update internal state.
+        # Actually update the internal state.
         self.ratings.append(
             Rating(best_worst_removed_percentage, self.GetAdvice(),
                    worst_removed_percentage, actual_removed_percentage))

@@ -7,11 +7,6 @@ import ai
 
 MAX_PRINT_POSSIBILITIES = 75
 
-HELP_HELPER = ("Veuillez entrer soit 'state' pour connaitre les possibilités "
-               "restantes, soit 'help' pour connaitre le meilleur coup "
-               "possible, soit 'win' pour indiquer que vous avez gagné, soit "
-               "<code> <noirs> <blancs> pour mettre à jour.")
-
 HELP_FREE_GAME = ("Veuillez entrer soit 'poss' ou 'nbposs' pour connaitre les "
                   "possibilités restantes, soit 'indice' pour connaitre le "
                   "meilleur coup possible, soit <code> pour proposer une "
@@ -58,9 +53,9 @@ class MasterBot(object):
             num_digits = int(num_digits_str)
             if self.game.ChangeValueAndDigits(max_value, num_digits):
                 self.bot.ChangeValueAndDigits(max_value, num_digits)
-                irc.SendMessage('Partie annulée et variables changées!')
+                irc.SendMessage('Partie annulée et variables changées !')
             else:
-                irc.SendMessage('Trop de possibilités!')
+                irc.SendMessage('Trop de possibilités ou variables erronées !')
         except:
             irc.SendMessage('Parse Error :(')
             pass
@@ -99,13 +94,12 @@ class MasterBot(object):
             if attempt.has_won:
                 irc.SendMessage(
                     'Tu as gagné ! Il te restait {} essai(s).'.format(
-                        self.game.GetNbRemainingTries()))
+                        attempt.remaining_tries))
                 ratings = self.bot.Reset()
             else:
                 irc.SendMessage(
                     'Noirs: {} Blancs: {} Essais restants: {}'.format(
-                        attempt.black, attempt.white,
-                        self.game.GetNbRemainingTries()))
+                        attempt.black, attempt.white, attempt.remaining_tries))
                 self.bot.Update(code, attempt.black, attempt.white)
                 if attempt.has_lost:
                     irc.SendMessage('Tu as perdu... Le code était: {}'. format(
@@ -152,5 +146,6 @@ class MasterBot(object):
             irc.SendMessage('Meilleur coup: ' + self.bot.GetAdvice())
         elif message == 'aide':
             irc.SendMessage(HELP_FREE_GAME)
-        elif re.match(r'^[1-9]+$', message):
+        elif (re.match(r'^[1-9]+$', message) and
+              self.game.IsValidAttempt(message)):
             self._Attempt(irc, message)

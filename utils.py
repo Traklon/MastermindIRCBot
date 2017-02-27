@@ -44,8 +44,8 @@ def GetAllCodes(max_value, num_digits):
 
     The length of the returned list is max_value ** num_digits.
     """
-    return [''.join(str(digit) for digit in digits) for digits in
-            itertools.product(xrange(1, max_value + 1), repeat=num_digits)]
+    all_codes = itertools.product(xrange(1, max_value + 1), repeat=num_digits)
+    return [''.join(str(digit) for digit in digits) for digits in all_codes]
 
 
 @functools32.lru_cache(maxsize=1)
@@ -71,5 +71,5 @@ def _GetPossibilitiesDict(max_value, num_digits):
 
 
 def GetPossibilities(max_value, num_digits, code):
-    """Query the possibilities dict for given pameters and a given code."""
+    """Query the possibilities dict for given parameters and a given code."""
     return _GetPossibilitiesDict(max_value, num_digits)[code]
