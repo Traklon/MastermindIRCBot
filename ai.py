@@ -30,7 +30,7 @@ class AI(object):
         self.Reset()
 
     def Reset(self):
-        """Resests the AI to be ready for another game."""
+        """Resets the AI to be ready for another game."""
         # At the beginning, all the codes are possible.
         self.remaining_codes = set(
             utils.GetAllCodes(self.max_value, self.num_digits))
