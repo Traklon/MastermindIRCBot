@@ -88,36 +88,29 @@ class MasterBot(object):
 
     def _Attempt(self, irc, code):
         """Sends an attempt to the game, displaying info if the game ends."""
-        try:
-            attempt = self.game.ProposeCode(code)
-            ratings = None
-            if attempt.has_won:
+        attempt = self.game.ProposeCode(code)
+        self.bot.Update(code, attempt.black, attempt.white)
+        ratings = None
+        if attempt.has_won:
+            irc.SendMessage('Tu as gagné ! Il te restait {} essai(s).'.format(
+                attempt.remaining_tries))
+            ratings = self.bot.Reset()
+        else:
+            irc.SendMessage('Noirs: {} Blancs: {} Essais restants: {}'.format(
+                attempt.black, attempt.white, attempt.remaining_tries))
+            if attempt.has_lost:
                 irc.SendMessage(
-                    'Tu as gagné ! Il te restait {} essai(s).'.format(
-                        attempt.remaining_tries))
+                    'Tu as perdu... Le code était: {}'. format(attempt.target))
                 ratings = self.bot.Reset()
-            else:
+        if self.enable_rating and ratings:
+            for rating in ratings:
                 irc.SendMessage(
-                    'Noirs: {} Blancs: {} Essais restants: {}'.format(
-                        attempt.black, attempt.white, attempt.remaining_tries))
-                self.bot.Update(code, attempt.black, attempt.white)
-                if attempt.has_lost:
-                    irc.SendMessage('Tu as perdu... Le code était: {}'. format(
-                        attempt.target))
-                    ratings = self.bot.Reset()
-            if self.enable_rating and ratings:
-                for rating in ratings:
-                    irc.SendMessage(
-                        'Meilleur pire cas: {}% ({}), Pire cas: {}%, '
-                        'Supprimées: {}%'.format(
-                            rating.best_worst_removed_percentage,
-                            rating.best_code,
-                            rating.worst_removed_percentage,
-                            rating.actual_removed_percentage))
-
-        except Exception as e:
-            irc.SendMessage('Code invalide :(')
-            print e
+                    'Meilleur pire cas: {}% ({}), Pire cas: {}%, '
+                    'Supprimées: {}%'.format(
+                        rating.best_worst_removed_percentage,
+                        rating.best_code,
+                        rating.worst_removed_percentage,
+                        rating.actual_removed_percentage))
 
     def _ParseInputAndUpdate(self, irc):
         """Switch-type function to know what to do depending on the message."""
