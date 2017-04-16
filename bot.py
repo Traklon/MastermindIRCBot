@@ -11,8 +11,8 @@ CHAN = "#{chan}"
 
 DEFAULT_PORT = 6667
 
-PERUBOT_NICK = "MasterBot"
-PERUBOT_WHOIS = "Mastermind Bot hosted by Traklon."
+NICK = "MasterBot"
+WHOIS = "Mastermind Bot hosted by Traklon."
 
 
 class IRCBot(ircbot.SingleServerIRCBot):
@@ -35,8 +35,7 @@ class IRCBot(ircbot.SingleServerIRCBot):
         else:
             port = sys.argv[3]
 
-        ircbot.SingleServerIRCBot.__init__(
-            self, [(server, port)], PERUBOT_NICK, PERUBOT_WHOIS)
+        ircbot.SingleServerIRCBot.__init__(self, [(server, port)], NICK, WHOIS)
 
         self._chan = CHAN.format(chan=sys.argv[2])
 
