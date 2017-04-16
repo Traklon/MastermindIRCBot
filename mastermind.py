@@ -67,6 +67,7 @@ class Game(object):
         """Returns the proximity to target and update the number of tries."""
         # Keep track if the game is finished or not.
         game_over = False
+        self.remaining_tries -= 1
         if code == self.target:
             attempt_result = AttemptResult(
                 has_won=True, has_lost=False, black=self.num_digits, white=0,
@@ -76,7 +77,6 @@ class Game(object):
             # The code was incorrect, so we compute and return the proximity.
             black, white = utils.ComputeProximity(
                 self.max_value, self.num_digits, self.target, code)
-            self.remaining_tries -= 1
             game_over = not self.remaining_tries
             # Only return the target if the game is over.
             target = self.target if game_over else None
