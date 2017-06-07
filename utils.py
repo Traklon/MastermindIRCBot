@@ -1,11 +1,11 @@
 """Utils for the game of Mastermind."""
 
 import collections
-import functools32  # ircbot doesn't exist for Python 3 so we must import this.
+import functools
 import itertools
 
 
-@functools32.lru_cache(maxsize=2401)  # Up to 7^4 values.
+@functools.lru_cache(maxsize=2401)  # Up to 7^4 values.
 def _GetCount(max_value, num_digits, code):
     """Returns the count of each character from the code.
 
@@ -38,17 +38,17 @@ def ComputeProximity(max_value, num_digits, code_1, code_2):
     return black, black_and_white - black
 
 
-@functools32.lru_cache()
+@functools.lru_cache()
 def GetAllCodes(max_value, num_digits):
     """Returns all possible codes for a given max_value and num_digits.
 
     The length of the returned list is max_value ** num_digits.
     """
-    all_codes = itertools.product(xrange(1, max_value + 1), repeat=num_digits)
+    all_codes = itertools.product(range(1, max_value + 1), repeat=num_digits)
     return [''.join(str(digit) for digit in digits) for digits in all_codes]
 
 
-@functools32.lru_cache(maxsize=1)
+@functools.lru_cache(maxsize=1)
 def _GetPossibilitiesDict(max_value, num_digits):
     """Returns a dict matching a code and a proximity to all the matching codes.
 
