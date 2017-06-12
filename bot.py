@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 """Base IRC Bot that abstracts the boilerplate from the actual logic."""
 
-import irclib
-import ircbot
+import irc.client
+import irc.bot as ircbot
 import sys
 
 import masterbot
@@ -51,11 +52,11 @@ class IRCBot(ircbot.SingleServerIRCBot):
 
     def GetAuthor(self):
         """Returns the nickname of the author of the latest message."""
-        return irclib.nm_to_n(self._ev.source())
+        return irc.client.nm_to_n(self._ev.source())
 
     def GetMessage(self):
         """Returns the latest message."""
-        return self._ev.arguments()[0].lower()
+        return self._ev.arguments[0].lower()
 
     def SendMessage(self, message, message_to=None):
         """Sends a message to a specific user or to the whole chan."""
